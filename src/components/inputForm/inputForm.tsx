@@ -25,6 +25,7 @@ const InputForm: FunctionComponent<Props> = props => {
                     <TextField value={inputText}
                                onChange={(e) => setInputText(e.target.value)}
                                fullWidth
+                               autoFocus
                                label='What needs doing?'
                                inputProps={{'aria-label': 'naked'}}
                                color='secondary'

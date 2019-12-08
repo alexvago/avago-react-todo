@@ -8,6 +8,38 @@ import {Add as AddIcon} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
 import InputForm from "../inputForm";
 
+import {useMutation, useQuery} from '@apollo/react-hooks';
+import {gql} from 'apollo-boost';
+
+const GET_TODOS = gql`
+    {
+        allTodos {
+            id
+            text
+            done
+        }
+    }
+`;
+
+const ADD_TODO = gql`
+    mutation AddTodo($todo: TodoInput!) {
+        addTodo(input: $todo) {
+            id
+            text
+            done
+        }
+    }
+`;
+
+const TOGGLE_TODO = gql`
+    mutation ToggleTodo($id: Int!) {
+        toggleTodo(id: $id){
+            id,
+            done
+        }
+    }
+`;
+
 const useStyles = makeStyles(theme => ({
     fab: {
         position: 'fixed',
@@ -16,28 +48,45 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const initTodos = [
-    {title: "Add input field", checked: true},
-    {title: "Add styling", checked: false}
-];
 
 function Home() {
-    const [todos, setTodos] = React.useState(initTodos);
     const [open, setOpen] = React.useState(false);
+
+    const {loading, error, data} = useQuery(GET_TODOS);
+    const [addTodo] = useMutation(ADD_TODO, {
+        refetchQueries:  [ { query: GET_TODOS }],
+        /*update(cache, {data: {addTodo}}) {
+            // @ts-ignore
+            const {todos} = cache.readQuery({query: GET_TODOS});
+            cache.writeQuery({
+                query: GET_TODOS,
+                data: {todos: todos.concat([addTodo])},
+            });
+        }*/
+    });
+
+    const [toggleTodo] = useMutation(TOGGLE_TODO, {
+        refetchQueries:  [ { query: GET_TODOS }],
+       /* update(cache, {data: {toggleTodo}}) {
+            // @ts-ignore
+            const {todos} = cache.readQuery({query: GET_TODOS});
+            cache.writeQuery({
+                query: GET_TODOS,
+                data: {todos: todos.concat([toggleTodo])},
+            });
+        }*/
+    });
 
 
     const classes = useStyles();
 
-    const addTodo = (text: string) => {
-        const newTodos = [...todos, {title: text, checked: false}];
-        setTodos(newTodos);
+    const handleAddTodo = async (text: string) => {
+        addTodo({variables: {todo: {text: text}}});
         setOpen(false);
     };
 
-    const handleToggleTodo = (index: number) => {
-        const newTodos = [...todos];
-        newTodos[index].checked = !todos[index].checked;
-        setTodos(newTodos);
+    const handleToggleTodo = (id: number) => {
+        toggleTodo({variables: {id: id}})
     };
 
 
@@ -45,15 +94,24 @@ function Home() {
         <Container maxWidth='sm'>
             <Paper className="home">
                 <Typography variant='h5'>You still need to:</Typography>
+                {loading &&
+                <p>Loading...</p>
+                }
+                {error &&
+                <p>Error :(</p>
+                }
+                {!loading && !error &&
                 <List>
-                    {todos.map((todo, i) => (
-                        <Todo todo={todo} key={i} index={i} handleToggle={handleToggleTodo}/>
+                    {data.allTodos.map((todo: any) => (
+                        <Todo todo={todo} key={todo.id} handleToggle={handleToggleTodo}/>
                     ))}
                 </List>
+                }
+
             </Paper>
 
             <Dialog open={open} onClose={(e) => setOpen(false)}>
-                <InputForm addTodo={addTodo}/>
+                <InputForm addTodo={handleAddTodo}/>
             </Dialog>
 
             <Fab color="primary" aria-label="add" className={classes.fab} onClick={(e) => setOpen(true)}>

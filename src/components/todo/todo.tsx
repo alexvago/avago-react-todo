@@ -4,30 +4,31 @@ import {Checkbox, ListItem, ListItemIcon, ListItemText} from "@material-ui/core"
 
 type Props = {
     todo: {
-        title: string
-        checked?: boolean
+        id: number,
+        text: string
+        done?: boolean
     },
-    index: number,
-    handleToggle: (index: number) => void
+    handleToggle: (id: number) => void
 }
 
-const Todo: FunctionComponent<Props> = ({todo, index, handleToggle}) => {
-    const labelId = `checkbox-list-label-${index}`;
+const Todo: FunctionComponent<Props> = ({todo, handleToggle}) => {
+
+    const labelId = `checkbox-list-label-${todo.id}`;
 
     return (
         <ListItem dense button onClick={() => {
-            handleToggle(index);
+            handleToggle(todo.id);
         }}>
             <ListItemIcon>
                 <Checkbox
                     edge="start"
-                    checked={todo.checked}
+                    checked={todo.done}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelId }}
                 />
             </ListItemIcon>
-            <ListItemText id={labelId} primary={todo.title} />
+            <ListItemText id={labelId} primary={todo.text} />
         </ListItem>
     );
 };
