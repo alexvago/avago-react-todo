@@ -32,7 +32,7 @@ const ADD_TODO = gql`
 `;
 
 const TOGGLE_TODO = gql`
-    mutation ToggleTodo($id: Int!) {
+    mutation ToggleTodo($id: String!) {
         toggleTodo(id: $id){
             id,
             done
@@ -85,7 +85,7 @@ function Home() {
         setOpen(false);
     };
 
-    const handleToggleTodo = (id: number) => {
+    const handleToggleTodo = (id: string) => {
         toggleTodo({variables: {id: id}})
     };
 

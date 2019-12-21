@@ -4,11 +4,11 @@ import {Checkbox, ListItem, ListItemIcon, ListItemText} from "@material-ui/core"
 
 type Props = {
     todo: {
-        id: number,
+        id: string,
         text: string
         done?: boolean
     },
-    handleToggle: (id: number) => void
+    handleToggle: (id: string) => void
 }
 
 const Todo: FunctionComponent<Props> = ({todo, handleToggle}) => {
@@ -25,10 +25,10 @@ const Todo: FunctionComponent<Props> = ({todo, handleToggle}) => {
                     checked={todo.done}
                     tabIndex={-1}
                     disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
+                    inputProps={{'aria-labelledby': labelId}}
                 />
             </ListItemIcon>
-            <ListItemText id={labelId} primary={todo.text} />
+            <ListItemText id={labelId} primary={todo.text} className={todo.done ? "todo-done" : ""}/>
         </ListItem>
     );
 };

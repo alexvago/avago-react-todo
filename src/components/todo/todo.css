@@ -2,6 +2,6 @@
     list-style: none;
 }
 
-.todo-checked {
+.todo-done {
     text-decoration: line-through;
 }
