@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-react-todo-hooks-dev-130928-authRole",
+            "UnauthRoleArn": "arn:aws:iam::957553172928:role/amplify-react-todo-hooks-dev-130928-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::957553172928:role/amplify-react-todo-hooks-dev-130928-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "amplify-react-todo-hooks-dev-130928-deployment",
+            "UnauthRoleName": "amplify-react-todo-hooks-dev-130928-unauthRole",
+            "StackName": "amplify-react-todo-hooks-dev-130928",
+            "StackId": "arn:aws:cloudformation:eu-west-1:957553172928:stack/amplify-react-todo-hooks-dev-130928/abc8b580-6135-11ea-ae86-0a9b71aae734",
+            "AmplifyAppId": "d3stjy1e6f5gjk"
+        }
+    }
+}
